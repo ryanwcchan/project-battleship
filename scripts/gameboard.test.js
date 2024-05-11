@@ -27,12 +27,12 @@ describe('Gameboards', () => {
         });
     })
 
-    describe("recieveAttack function", () => {
+    describe("receiveAttack function", () => {
         it('should takes a pair of coordinates and determines if the attack hit a ship.', () => {
             let newBoard = new Gameboard(8, 8);
             newBoard.placeShip(0, 0, 5, 'vertical');
 
-            expect(newBoard.recieveAttack(0, 0)).toBe(true)
+            expect(newBoard.receiveAttack(0, 0)).toBe(true)
         })
     })
 })

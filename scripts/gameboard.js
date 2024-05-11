@@ -5,6 +5,7 @@ class Gameboard {
         this.rows = rows;
         this.cols = cols;
         this.grid = [];
+        this.missed = [];
 
         for (let i = 0; i < this.rows; i++) {
             let row = []
@@ -15,7 +16,7 @@ class Gameboard {
         }
     }
 
-    placeShip(startY, startX, length, orientation) {
+    placeShip(startX, startY, length, orientation) {
         // Create new ship object
         const ship = new Ship(length);
 
@@ -26,11 +27,11 @@ class Gameboard {
                     throw new Error("Ship placement out of bounds")
                 }
 
-                if (this.grid[startY][startX + i] !== null) {
+                if (this.grid[startX + i][startY] !== null) {
                     throw new Error("Cannot place ship here");
                 }
 
-                this.grid[startY][startX + i] = ship;
+                this.grid[startX + i][startY] = ship;
             }
         } else if (orientation === "vertical") {
             for (let i = 0; i < length; i++) {
@@ -38,12 +39,25 @@ class Gameboard {
                     throw new Error("Ship placement out of bounds")
                 }
 
-                if (this, grid[startY + i][startX] !== null) {
+                if (this.grid[startX][startY + i] !== null) {
                     throw new Error("Cannot place ship here");
                 }
 
-                this.grid[startY + i][startX] = ship;
+                this.grid[startX][startY + i] = ship;
             }
+        }
+    }
+
+    receiveAttack(x, y) {
+        const attack = this.grid[x][y];
+
+        if (attack instanceof Ship) {
+            attack.hit();
+            return true;
+        } else {
+            // Keep track of missed spots
+            this.missed.push({ x, y })
+            return false
         }
     }
 }
