@@ -6,6 +6,8 @@ class Gameboard {
         this.cols = cols;
         this.grid = [];
         this.missed = [];
+        this.shipCoords = [];
+        this.ships = [];
 
         for (let i = 0; i < this.rows; i++) {
             let row = []
@@ -32,6 +34,7 @@ class Gameboard {
                 }
 
                 this.grid[startX + i][startY] = ship;
+                this.shipCoords.push([(startX + i), startY])
             }
         } else if (orientation === "vertical") {
             for (let i = 0; i < length; i++) {
@@ -44,8 +47,11 @@ class Gameboard {
                 }
 
                 this.grid[startX][startY + i] = ship;
+                this.shipCoords.push([startX, (startY + i)])
             }
         }
+
+        this.ships.push(ship);
     }
 
     receiveAttack(x, y) {
@@ -56,7 +62,7 @@ class Gameboard {
             return true;
         } else {
             // Keep track of missed spots
-            this.missed.push({ x, y })
+            this.missed.push([x, y])
             return false
         }
     }

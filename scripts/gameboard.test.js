@@ -35,4 +35,25 @@ describe('Gameboards', () => {
             expect(newBoard.receiveAttack(0, 0)).toBe(true)
         })
     })
-})
+
+    describe('Gameboard.shipCoords', () => {
+        it('should report coordinates where ships exist', () => {
+            let gameboard = new Gameboard(6, 6);
+            gameboard.placeShip(0, 0, 5, 'vertical');
+            expect(gameboard.shipCoords).toEqual([[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
+        });
+    });
+
+    describe('Gameboard.missed', () => {
+        it('should keep track of missed attacks and display them properly.', () => {
+            let board = new Gameboard(7, 7);
+            board.placeShip(0, 0, 1, 'horizontal');
+            board.receiveAttack(0, 1)
+            expect(board.missed).toEqual([[0, 1]])
+        });
+    });
+
+    describe('Gameboard.ships', () => {
+        it.todo('should return an array of ships')
+    });
+});
