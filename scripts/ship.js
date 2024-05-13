@@ -2,6 +2,7 @@ class Ship {
     constructor(length) {
         this.hits = 0
         this.length = length
+        this.coords = []
         this.sunk = false
     }
 
@@ -13,9 +14,8 @@ class Ship {
         if (this.hits === this.length) {
             this.sunk = true;
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 }
 

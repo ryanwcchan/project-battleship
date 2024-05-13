@@ -6,8 +6,8 @@ class Gameboard {
         this.cols = cols;
         this.grid = [];
         this.missed = [];
-        this.shipCoords = [];
         this.ships = [];
+        this.sunk = [];
 
         for (let i = 0; i < this.rows; i++) {
             let row = []
@@ -34,7 +34,7 @@ class Gameboard {
                 }
 
                 this.grid[startX + i][startY] = ship;
-                this.shipCoords.push([(startX + i), startY])
+                ship.coords.push([(startX + i), startY])
             }
         } else if (orientation === "vertical") {
             for (let i = 0; i < length; i++) {
@@ -47,7 +47,7 @@ class Gameboard {
                 }
 
                 this.grid[startX][startY + i] = ship;
-                this.shipCoords.push([startX, (startY + i)])
+                ship.coords.push([startX, (startY + i)])
             }
         }
 
@@ -59,12 +59,23 @@ class Gameboard {
 
         if (attack instanceof Ship) {
             attack.hit();
+            if (attack.isSunk()) {
+                this.sunk.push(attack)
+            }
             return true;
         } else {
             // Keep track of missed spots
             this.missed.push([x, y])
             return false
         }
+    }
+
+    shipCoords() {
+        const shipCoords = [];
+        for (const s of this.ships) {
+            shipCoords.push(...s.coords)
+        }
+        return shipCoords;
     }
 }
 

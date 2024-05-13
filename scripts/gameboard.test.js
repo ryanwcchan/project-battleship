@@ -40,7 +40,7 @@ describe('Gameboards', () => {
         it('should report coordinates where ships exist', () => {
             let gameboard = new Gameboard(6, 6);
             gameboard.placeShip(0, 0, 5, 'vertical');
-            expect(gameboard.shipCoords).toEqual([[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
+            expect(gameboard.shipCoords()).toEqual([[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
         });
     });
 
@@ -53,7 +53,16 @@ describe('Gameboards', () => {
         });
     });
 
-    describe('Gameboard.ships', () => {
-        it.todo('should return an array of ships')
+    describe('Gameboard.sunk', () => {
+        it('should return an array of sunk ships.', () => {
+            let board = new Gameboard(5, 5);
+            board.placeShip(0, 0, 2, "vertical"); // Ship 1
+            board.placeShip(1, 1, 2, "horizontal"); // Ship 2
+            // Sink ship 2
+            board.receiveAttack(1, 1);
+            board.receiveAttack(2, 1);
+
+            expect(board.sunk.length).toBe(1);
+        });
     });
 });
