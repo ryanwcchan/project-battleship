@@ -1,3 +1,3 @@
-const Ship = require('./ship')
-const Gameboard = require('./gameboard');
-const Player = require('./player');
+import Ship from './ship';
+import Gameboard from './gameboard';
+import Player from './player';

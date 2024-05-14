@@ -1,5 +1,5 @@
-const Gameboard = require('./gameboard');
-const Ship = require('./ship')
+import Gameboard from './gameboard';
+import Ship from './ship';
 
 describe('Gameboards', () => {
     describe('should initialize a grid based on declared rows and cols when', () => {

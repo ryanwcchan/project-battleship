@@ -1,4 +1,4 @@
-const Ship = require('./ship')
+import Ship from './ship';
 
 describe('Ship.hit()', () => {
     it('should increase number of hits to ship.', () => {
