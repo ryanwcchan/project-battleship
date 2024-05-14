@@ -65,4 +65,22 @@ describe('Gameboards', () => {
             expect(board.sunk.length).toBe(1);
         });
     });
+
+    describe('Gameboard', () => {
+        it("should be able to report whether or not all of their ships have been sunk.", () => {
+            let board = new Gameboard(5, 5);
+            board.placeShip(0, 0, 2, "vertical"); // Ship 1
+            board.placeShip(3, 3, 2, "horizontal"); // Ship 2
+
+            // Sink ship 1
+            board.receiveAttack(0, 0);
+            board.receiveAttack(0, 1);
+
+            // Sink ship 2
+            board.receiveAttack(3, 3);
+            board.receiveAttack(4, 3);
+
+            expect(board.allShipsSunk()).toBe(true)
+        })
+    })
 });

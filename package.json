@@ -1,9 +1,15 @@
 {
   "devDependencies": {
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4"
   },
   "scripts": {
     "test": "jest",
-    "watch": "jest --watch"
+    "jest-watch": "jest --watch",
+    "start": "webpack serve",
+    "wp-watch": "webpack --watch",
+    "build": "webpack"
   }
 }

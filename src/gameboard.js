@@ -77,6 +77,10 @@ class Gameboard {
         }
         return shipCoords;
     }
+
+    allShipsSunk() {
+        return this.ships.length === this.sunk.length;
+    }
 }
 
 module.exports = Gameboard;
