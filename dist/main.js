@@ -1,1 +1,32 @@
-(()=>{var s={906:(s,t,i)=>{const r=i(432);s.exports=class{constructor(s,t){this.rows=s,this.cols=t,this.grid=[],this.missed=[],this.ships=[],this.sunk=[];for(let s=0;s<this.rows;s++){let s=[];for(let t=0;t<this.cols;t++)s.push(null);this.grid.push(s)}}placeShip(s,t,i,h){const o=new r(i);if("horizontal"===h)for(let r=0;r<i;r++){if(s+r>=this.cols)throw new Error("Ship placement out of bounds");if(null!==this.grid[s+r][t])throw new Error("Cannot place ship here");this.grid[s+r][t]=o,o.coords.push([s+r,t])}else if("vertical"===h)for(let r=0;r<i;r++){if(t+r>=this.rows)throw new Error("Ship placement out of bounds");if(null!==this.grid[s][t+r])throw new Error("Cannot place ship here");this.grid[s][t+r]=o,o.coords.push([s,t+r])}this.ships.push(o)}receiveAttack(s,t){const i=this.grid[s][t];return i instanceof r?(i.hit(),i.isSunk()&&this.sunk.push(i),!0):(this.missed.push([s,t]),!1)}shipCoords(){const s=[];for(const t of this.ships)s.push(...t.coords);return s}allShipsSunk(){return this.ships.length===this.sunk.length}}},211:s=>{s.exports=class{constructor(s,t){this.name=s,this.type=t,this.score=0}}},432:s=>{s.exports=class{constructor(s){this.hits=0,this.length=s,this.coords=[],this.sunk=!1}hit(){return this.hits++}isSunk(){return this.hits===this.length&&(this.sunk=!0,!0)}}}},t={};function i(r){var h=t[r];if(void 0!==h)return h.exports;var o=t[r]={exports:{}};return s[r](o,o.exports,i),o.exports}i(432),i(906),i(211)})();
+/*
+ * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/index.js":
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+/***/ (() => {
+
+eval("// import Ship from './ship';\n// import Gameboard from './gameboard';\n// import Player from './player';\n\n//# sourceURL=webpack://project-battleship/./src/index.js?");
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module can't be inlined because the eval devtool is used.
+/******/ 	var __webpack_exports__ = {};
+/******/ 	__webpack_modules__["./src/index.js"]();
+/******/ 	
+/******/ })()
+;
