@@ -1,12 +1,10 @@
-const gridContainer = document.querySelector('.grid-container')
-
-export default function createGrid(width, height) {
+export default function createGrid(container, width, height) {
     for (let i = 0; i < width; i++) {
-        createRow(height);
+        createRow(container, height);
     }
 }
 
-function createRow(size) {
+function createRow(container, size) {
     const row = document.createElement('div');
     row.classList.add('row');
 
@@ -15,9 +13,9 @@ function createRow(size) {
         // Add id to div 
         // cell.id = `cell-${i}`
         // Add class to div
-        cell.classList.add('cell')
-        row.appendChild(cell)
+        cell.classList.add('cell');
+        row.appendChild(cell);
     }
-    gridContainer.appendChild(row)
+    container.appendChild(row);
 }
 

@@ -160,6 +160,10 @@ table {
     flex-direction: column;
 }
 
+.body {
+    display: flex;
+}
+
 .cell {
     display: flex;
     border: 1px solid black;
