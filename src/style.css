@@ -134,11 +134,16 @@ table {
     border-spacing: 0;
 }
 
+body {
+    height: 100vh;
+}
+
 .container {
-    justify-content: center;
+    justify-content: space-between;
     flex-direction: column;
     align-items: center;
     display: flex;
+    min-height: 100vh;
 }
 
 #title {
@@ -155,13 +160,14 @@ table {
 }
 
 .grid-container {
-    margin: 10rem;
     display: flex;
     flex-direction: column;
 }
 
 .body {
     display: flex;
+    gap: 10rem;
+    margin: 5rem;
 }
 
 .cell {
@@ -169,4 +175,12 @@ table {
     border: 1px solid black;
     width: 30px;
     height: 30px;
+}
+
+.cell:hover {
+    background-color: green;
+}
+
+.footer {
+    padding: 1.5rem;
 }
