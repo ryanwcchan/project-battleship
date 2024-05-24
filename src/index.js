@@ -3,13 +3,15 @@
 // import Player from './player';
 
 import './style.css'
-import createGrid from './createGrid.js'
+import newGame from './newGame.js'
 
-document.addEventListener('DOMContentLoaded', () => {
-    const playerGrid = document.getElementById('player-grid');
-    const enemyGrid = document.getElementById('enemy-grid');
+// New game
+const body = document.querySelector('.body');
+const newGameButton = document.getElementById('newGame');
 
-    createGrid(playerGrid, 10, 10);
-    createGrid(enemyGrid, 10, 10);
+newGameButton.addEventListener('click', () => {
+    body.replaceChildren();
+    newGame(body);
 });
 
+newGame(body);

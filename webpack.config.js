@@ -35,7 +35,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: 'Battleship Game',
             filename: 'index.html',
-            template: './src/index.html'
+            template: '/index.html'
         }),
     ]
 };

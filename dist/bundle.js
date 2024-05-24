@@ -26,7 +26,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.css */ \"./src/style.css\");\n/* harmony import */ var _createGrid_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./createGrid.js */ \"./src/createGrid.js\");\n// import Ship from './ship';\n// import Gameboard from './gameboard';\n// import Player from './player';\n\n\n\ndocument.addEventListener('DOMContentLoaded', () => {\n  const playerGrid = document.getElementById('player-grid');\n  const enemyGrid = document.getElementById('enemy-grid');\n  (0,_createGrid_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"])(playerGrid, 10, 10);\n  (0,_createGrid_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"])(enemyGrid, 10, 10);\n});\n\n//# sourceURL=webpack://project-battleship/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.css */ \"./src/style.css\");\n/* harmony import */ var _newGame_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./newGame.js */ \"./src/newGame.js\");\n// import Ship from './ship';\n// import Gameboard from './gameboard';\n// import Player from './player';\n\n\n\n\n// New game\nconst body = document.querySelector('.body');\nconst newGameButton = document.getElementById('newGame');\nnewGameButton.addEventListener('click', () => {\n  body.replaceChildren();\n  (0,_newGame_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"])(body);\n});\n(0,_newGame_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"])(body);\n\n//# sourceURL=webpack://project-battleship/./src/index.js?");
+
+/***/ }),
+
+/***/ "./src/newGame.js":
+/*!************************!*\
+  !*** ./src/newGame.js ***!
+  \************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ newGame)\n/* harmony export */ });\n/* harmony import */ var _createGrid_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createGrid.js */ \"./src/createGrid.js\");\n\nfunction newGame(container) {\n  const playerGrid = document.createElement('div');\n  const enemyGrid = document.createElement('div');\n  playerGrid.classList.add('grid-container');\n  enemyGrid.classList.add('grid-container');\n  playerGrid.setAttribute(\"id\", \"player-grid\");\n  enemyGrid.setAttribute(\"id\", \"enemy-grid\");\n  container.appendChild(playerGrid);\n  container.appendChild(enemyGrid);\n  (0,_createGrid_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(playerGrid, 10, 10);\n  (0,_createGrid_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(enemyGrid, 10, 10);\n  console.log(\"Reset grid\");\n}\n\n//# sourceURL=webpack://project-battleship/./src/newGame.js?");
 
 /***/ }),
 
