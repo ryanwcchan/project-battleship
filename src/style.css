@@ -164,7 +164,7 @@ body {
     flex-direction: column;
 }
 
-.body {
+.wrapper {
     display: flex;
     gap: 10rem;
     margin: 5rem;
@@ -177,10 +177,14 @@ body {
     height: 30px;
 }
 
-.cell:hover {
-    background-color: green;
-}
-
 .footer {
     padding: 1.5rem;
+}
+
+.pick-div {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    border: 2px solid black;
+    padding: 2.5rem;
 }
