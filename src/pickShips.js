@@ -23,17 +23,24 @@ export default function pickShips(container) {
     ]
 
     shipData.forEach(ship => {
-        createShip(wrapper, 1, ship.length, ship.name);
+        createShip(wrapper, ship.length, ship.name, orientation);
     });
 
     rotateButton.addEventListener('click', () => {
         if (orientation === 'horizontal') {
             orientation = 'vertical';
-
+            wrapper.replaceChildren();
+            shipData.forEach(ship => {
+                createShip(wrapper, ship.length, ship.name, orientation);
+            });
         } else {
             orientation = 'horizontal';
+            wrapper.replaceChildren();
+            shipData.forEach(ship => {
+                createShip(wrapper, ship.length, ship.name, orientation);
+            });
         }
-        console.log(orientation)
+        console.log(orientation);
     });
 
     pickShipDiv.appendChild(rotateButton);
@@ -41,26 +48,29 @@ export default function pickShips(container) {
     container.appendChild(pickShipDiv);
 }
 
-function createShip(container, height, length, name) {
+function createShip(container, length, name, orientation) {
+    const shipWrapper = document.createElement('div');
     const shipDiv = document.createElement('div');
-    const shipName = document.createElement('span')
+    const shipName = document.createElement('span');
+    shipWrapper.classList.add('ship-wrapper');
     shipName.classList.add('ship-name');
     shipName.textContent = name;
     shipDiv.classList.add('ship-div');
-    createGrid(shipDiv, height, length);
 
-    const rows = shipDiv.querySelectorAll('.row')
+    if (orientation === 'horizontal') {
+        createGrid(shipDiv, 1, length);
+    } else {
+        createGrid(shipDiv, length, 1);
+    }
 
-    rows.forEach(row => {
-        const cells = row.querySelectorAll('.cell');
-        cells.forEach(cell => {
-            cell.style.backgroundColor = 'red'
-        })
-
-        row.setAttribute('draggable', 'true');
+    const cells = shipDiv.querySelectorAll('.cell');
+    cells.forEach(cell => {
+        cell.style.backgroundColor = 'red'
     });
 
-    shipDiv.appendChild(shipName)
-    container.appendChild(shipDiv);
-}
+    shipDiv.setAttribute('draggable', 'true')
 
+    shipWrapper.appendChild(shipDiv);
+    shipWrapper.appendChild(shipName);
+    container.appendChild(shipWrapper);
+}
