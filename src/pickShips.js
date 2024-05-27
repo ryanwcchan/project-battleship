@@ -1,4 +1,5 @@
-import createGrid from "./createGrid";
+import createShip from "./createShip";
+import dragFunctions from "./dragFunctions";
 
 export default function pickShips(container) {
     const wrapper = document.createElement('div');
@@ -22,25 +23,20 @@ export default function pickShips(container) {
         { name: 'Patrol Boat', length: 2 }
     ]
 
-    shipData.forEach(ship => {
-        createShip(wrapper, ship.length, ship.name, orientation);
-    });
+    shipDataShips(shipData, wrapper, orientation)
 
     rotateButton.addEventListener('click', () => {
         if (orientation === 'horizontal') {
             orientation = 'vertical';
             wrapper.replaceChildren();
-            shipData.forEach(ship => {
-                createShip(wrapper, ship.length, ship.name, orientation);
-            });
+            shipDataShips(shipData, wrapper, orientation)
         } else {
             orientation = 'horizontal';
             wrapper.replaceChildren();
-            shipData.forEach(ship => {
-                createShip(wrapper, ship.length, ship.name, orientation);
-            });
+            shipDataShips(shipData, wrapper, orientation)
         }
         console.log(orientation);
+        dragFunctions()
     });
 
     pickShipDiv.appendChild(rotateButton);
@@ -48,29 +44,8 @@ export default function pickShips(container) {
     container.appendChild(pickShipDiv);
 }
 
-function createShip(container, length, name, orientation) {
-    const shipWrapper = document.createElement('div');
-    const shipDiv = document.createElement('div');
-    const shipName = document.createElement('span');
-    shipWrapper.classList.add('ship-wrapper');
-    shipName.classList.add('ship-name');
-    shipName.textContent = name;
-    shipDiv.classList.add('ship-div');
-
-    if (orientation === 'horizontal') {
-        createGrid(shipDiv, 1, length);
-    } else {
-        createGrid(shipDiv, length, 1);
-    }
-
-    const cells = shipDiv.querySelectorAll('.cell');
-    cells.forEach(cell => {
-        cell.style.backgroundColor = 'red'
+function shipDataShips(shipData, wrapper, orientation) {
+    shipData.forEach(ship => {
+        createShip(wrapper, ship.length, ship.name, orientation);
     });
-
-    shipDiv.setAttribute('draggable', 'true')
-
-    shipWrapper.appendChild(shipDiv);
-    shipWrapper.appendChild(shipName);
-    container.appendChild(shipWrapper);
 }

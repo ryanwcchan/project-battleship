@@ -211,4 +211,14 @@ body {
     display: flex;
     justify-content: center;
     margin-top: .5rem;
+    user-select: none;
+}
+
+
+.dragging {
+    opacity: .5;
+}
+
+.button {
+    user-select: none;
 }
