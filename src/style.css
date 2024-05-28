@@ -186,7 +186,6 @@ body {
     display: flex;
     gap: 3rem;
     justify-content: center;
-    border: 2px solid black;
     padding: 2.5rem;
 }
 
@@ -221,4 +220,9 @@ body {
 
 .button {
     user-select: none;
+}
+
+.hovered {
+    background-color: red;
+    opacity: .5;
 }

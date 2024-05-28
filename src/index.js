@@ -5,8 +5,7 @@
 import './style.css'
 import createGrid from './createGrid.js'
 import Player from './player.js';
-import pickShips from './pickShips.js'
-import dragFunctions from './dragFunctions.js';
+import createShip from './createShip.js'
 
 // New game
 const body = document.querySelector('.body');
@@ -48,4 +47,90 @@ function reset() {
     pickDiv.replaceChildren();
     playerGrid.replaceChildren();
     enemyGrid.replaceChildren();
+}
+
+function dragFunctions() {
+    const draggables = document.querySelectorAll('.ship-div');
+    const playerContainer = document.querySelector('#player-grid');
+    const cells = playerContainer.querySelectorAll('.cell');
+
+    draggables.forEach(draggable => {
+        draggable.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', '');
+            draggable.classList.add('dragging');
+            console.log('drag start');
+        });
+
+        draggable.addEventListener('dragend', () => {
+            draggable.classList.remove('dragging');
+        });
+    });
+
+    cells.forEach(cell => {
+        cell.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const draggable = document.querySelector('.dragging');
+            cell.append(draggable)
+        });
+
+
+
+        cell.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const draggable = document.querySelector('.dragging');
+            if (draggable) {
+                cell.append(draggable)
+                draggable.classList.remove('dragging')
+            };
+        });
+    });
+};
+
+function pickShips(container) {
+    const wrapper = document.createElement('div');
+    const pickShipDiv = document.createElement('div');
+    const rotateButton = document.createElement('button');
+
+    rotateButton.textContent = 'Rotate';
+    rotateButton.classList.add('button');
+    rotateButton.setAttribute('id', 'rotate-button');
+    wrapper.classList.add('pick-ship-wrapper')
+    pickShipDiv.classList.add('pick-div');
+
+    let orientation = 'horizontal';
+
+    // Array of ships
+    const shipData = [
+        { name: 'Carrier', length: 5 },
+        { name: 'Battleship', length: 4 },
+        { name: 'Destroyer', length: 3 },
+        { name: 'Submarine', length: 3 },
+        { name: 'Patrol Boat', length: 2 }
+    ]
+
+    shipDataShips(shipData, wrapper, orientation)
+
+    rotateButton.addEventListener('click', () => {
+        if (orientation === 'horizontal') {
+            orientation = 'vertical';
+            wrapper.replaceChildren();
+            shipDataShips(shipData, wrapper, orientation)
+        } else {
+            orientation = 'horizontal';
+            wrapper.replaceChildren();
+            shipDataShips(shipData, wrapper, orientation)
+        }
+        console.log(orientation);
+        dragFunctions()
+    });
+
+    pickShipDiv.appendChild(rotateButton);
+    pickShipDiv.appendChild(wrapper);
+    container.appendChild(pickShipDiv);
+}
+
+function shipDataShips(shipData, wrapper, orientation) {
+    shipData.forEach(ship => {
+        createShip(wrapper, ship, orientation);
+    });
 }
