@@ -46,6 +46,6 @@ export default function pickShips(container) {
 
 function shipDataShips(shipData, wrapper, orientation) {
     shipData.forEach(ship => {
-        createShip(wrapper, ship.length, ship.name, orientation);
+        createShip(wrapper, ship, orientation);
     });
 }
