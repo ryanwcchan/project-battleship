@@ -14,6 +14,33 @@ const shipsData = [
     { name: 'Patrol Boat', length: 2 },
 ]
 
-function shipSelection() {
+createGrid(playerGrid);
 
+// function createGrid(grid) {
+//     for (let i = 0; i < 100; i++) {
+//         const cell = document.createElement('div');
+//         cell.classList.add('cell');
+//         cell.setAttribute('data-id', i);
+//         grid.appendChild(cell);
+//     }
+// }
+
+function createGrid(container) {
+    for (let i = 0; i < 10; i++) {
+        createRow(container, 10, i);
+    }
+}
+
+function createRow(container, size, rowIndex) {
+    const row = document.createElement('div');
+    row.classList.add('row');
+
+    for (let i = 0; i < size; i++) {
+        let cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.setAttribute('data-row', rowIndex);
+        cell.setAttribute('data-column', i);
+        row.appendChild(cell);
+    }
+    container.appendChild(row);
 }

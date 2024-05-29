@@ -170,12 +170,6 @@ body {
     padding: 1.5rem;
 }
 
-.board-container {
-    border: 2px solid black;
-    width: 200px;
-    height: 200px;
-}
-
 .ship-selection {
     border: 2px solid black;
     width: 200px;
@@ -185,3 +179,21 @@ body {
 .game-container {
     display: flex;
 }
+
+/* .grid {
+    display: grid;
+    grid-template-columns: repeat(10, 30px);
+    grid-template-rows: repeat(10, 30px);
+    margin: 20px;
+} */
+
+.cell:hover {
+    background-color: red;
+}
+
+/* .grid div {
+    width: 30px;
+    height: 30px;
+    background-color: #87CEEB;
+    border: 1px solid black;
+} */
