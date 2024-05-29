@@ -15,6 +15,7 @@ const shipsData = [
 ]
 
 createGrid(playerGrid);
+createGrid(computerGrid);
 
 // function createGrid(grid) {
 //     for (let i = 0; i < 100; i++) {
@@ -27,20 +28,21 @@ createGrid(playerGrid);
 
 function createGrid(container) {
     for (let i = 0; i < 10; i++) {
-        createRow(container, 10, i);
+        const row = document.createElement('div');
+        row.classList.add('row');
+
+        for (let j = 0; j < 10; j++) {
+            let cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.setAttribute('data-row', i);
+            cell.setAttribute('data-column', j);
+            row.appendChild(cell);
+        }
+
+        container.appendChild(row);
     }
 }
 
-function createRow(container, size, rowIndex) {
-    const row = document.createElement('div');
-    row.classList.add('row');
+function createShips() {
 
-    for (let i = 0; i < size; i++) {
-        let cell = document.createElement('div');
-        cell.classList.add('cell');
-        cell.setAttribute('data-row', rowIndex);
-        cell.setAttribute('data-column', i);
-        row.appendChild(cell);
-    }
-    container.appendChild(row);
 }
