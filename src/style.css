@@ -172,12 +172,13 @@ body {
 }
 
 #ship-selection {
-    border: 2px solid black;
-    width: 600px;
-    height: 100px;
     display: flex;
     align-self: center;
     margin: 1rem;
+    padding: 1rem;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    width: 30rem;
 }
 
 #game-container {
@@ -191,6 +192,32 @@ body {
     margin: 4rem;
 }
 
-.cell:hover {
+#board-container.cell:hover {
     background-color: red;
+}
+
+.ship-cell {
+    background-color: black;
+}
+
+.horizontal {
+    display: flex;
+}
+
+.vertical {
+    display: flex;
+    flex-direction: column;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.ship-area {
+    display: flex;
+    justify-content: center;
 }

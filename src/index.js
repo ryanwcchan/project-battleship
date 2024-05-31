@@ -17,14 +17,12 @@ const shipsData = [
 createGrid(playerGrid);
 createGrid(computerGrid);
 
-// function createGrid(grid) {
-//     for (let i = 0; i < 100; i++) {
-//         const cell = document.createElement('div');
-//         cell.classList.add('cell');
-//         cell.setAttribute('data-id', i);
-//         grid.appendChild(cell);
-//     }
-// }
+const shipSelector = document.getElementById('ship-selection');
+const buttonDiv = document.querySelector('.button-container');
+
+shipPlacer(shipsData, isHorizontal, buttonDiv);
+
+
 
 function createGrid(container) {
     for (let i = 0; i < 10; i++) {
@@ -43,6 +41,43 @@ function createGrid(container) {
     }
 }
 
-function createShips() {
+function createShip(name, length, isHorizontal) {
+    const ship = document.createElement('div');
+    ship.classList.add('ship');
+    ship.setAttribute('data-length', length);
+    ship.setAttribute('data-name', name);
+    ship.setAttribute('draggable', true)
 
+    if (isHorizontal) {
+        ship.classList.add('horizontal');
+        ship.setAttribute('data-horizontal', true)
+    } else {
+        ship.classList.add('vertical');
+        ship.setAttribute('data-horizontal', false)
+    }
+
+    for (let i = 0; i < length; i++) {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.classList.add('ship-cell');
+        ship.appendChild(cell);
+    }
+    shipSelector.append(ship);
+}
+
+function shipPlacer(shipsData, isHorizontal, buttonDiv) {
+    const rotateButton = document.createElement('button');
+    const resetButton = document.createElement('button');
+
+    rotateButton.classList.add('rotate-button');
+    resetButton.classList.add('reset-button');
+
+    rotateButton.textContent = "Rotate";
+    resetButton.textContent = "Reset";
+
+    buttonDiv.append(rotateButton, resetButton)
+
+    shipsData.forEach(ship => {
+        createShip(ship.name, ship.length, isHorizontal)
+    });
 }
