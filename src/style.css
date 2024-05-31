@@ -143,6 +143,7 @@ body {
     flex-direction: column;
     align-items: center;
     display: flex;
+    background-color: rgb(144, 202, 214);
 }
 
 #title {
@@ -192,7 +193,12 @@ body {
     margin: 4rem;
 }
 
-#board-container.cell:hover {
+#player-grid,
+#computer-grid {
+    background-color: wheat;
+}
+
+#board-container .cell:hover {
     background-color: red;
 }
 
