@@ -65,7 +65,7 @@ function createShip(name, length, isHorizontal) {
     shipSelector.append(ship);
 }
 
-function shipPlacer(shipsData, isHorizontal, buttonDiv) {
+function shipPlacer(shipsData, isHorizontal, buttonDiv, ships) {
     const rotateButton = document.createElement('button');
     const resetButton = document.createElement('button');
 
@@ -77,6 +77,42 @@ function shipPlacer(shipsData, isHorizontal, buttonDiv) {
 
     buttonDiv.append(rotateButton, resetButton)
 
+    rotateButton.addEventListener('click', () => {
+        if (isHorizontal) {
+            isHorizontal = false;
+            shipSelector.replaceChildren()
+            renderShips(shipsData, isHorizontal)
+        } else {
+            isHorizontal = true;
+            shipSelector.replaceChildren()
+            renderShips(shipsData, isHorizontal)
+        }
+    })
+    renderShips(shipsData, isHorizontal)
+}
+
+const ships = document.querySelectorAll('.ship');
+
+ships.forEach(ship => {
+    ship.addEventListener('dragstart', () => {
+        ship.classList.add('dragging');
+    })
+
+    ship.addEventListener('dragend', (e) => {
+        ship.classList.remove('dragging');
+        console.log(e.target)
+    })
+})
+
+playerGrid.addEventListener('dragover', () => {
+    console.log('drag over')
+})
+
+function drop(e) {
+    e.preventDefault()
+}
+
+function renderShips(shipsData, isHorizontal) {
     shipsData.forEach(ship => {
         createShip(ship.name, ship.length, isHorizontal)
     });

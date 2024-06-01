@@ -227,3 +227,7 @@ body {
     display: flex;
     justify-content: center;
 }
+
+.dragging {
+    opacity: .5;
+}
