@@ -135,7 +135,7 @@ table {
 }
 
 body {
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .container {
@@ -218,14 +218,13 @@ body {
 .button-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     gap: 1rem;
 }
 
 .ship-area {
     display: flex;
     justify-content: center;
+    position: relative;
 }
 
 .dragging {

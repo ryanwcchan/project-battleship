@@ -1,9 +1,9 @@
 import './style.css'
+import createGrid from './createGrid';
 
 const playerGrid = document.getElementById('player-grid');
 const computerGrid = document.getElementById('computer-grid');
 
-let draggedShip = null;
 let isHorizontal = true;
 
 const shipsData = [
@@ -22,38 +22,18 @@ const buttonDiv = document.querySelector('.button-container');
 
 shipPlacer(shipsData, isHorizontal, buttonDiv);
 
-
-
-function createGrid(container) {
-    for (let i = 0; i < 10; i++) {
-        const row = document.createElement('div');
-        row.classList.add('row');
-
-        for (let j = 0; j < 10; j++) {
-            let cell = document.createElement('div');
-            cell.classList.add('cell');
-            cell.setAttribute('data-row', i);
-            cell.setAttribute('data-column', j);
-            row.appendChild(cell);
-        }
-
-        container.appendChild(row);
-    }
-}
-
 function createShip(name, length, isHorizontal) {
     const ship = document.createElement('div');
     ship.classList.add('ship');
     ship.setAttribute('data-length', length);
     ship.setAttribute('data-name', name);
     ship.setAttribute('draggable', true)
+    ship.setAttribute('data-horizontal', isHorizontal);
 
     if (isHorizontal) {
         ship.classList.add('horizontal');
-        ship.setAttribute('data-horizontal', true)
     } else {
         ship.classList.add('vertical');
-        ship.setAttribute('data-horizontal', false)
     }
 
     for (let i = 0; i < length; i++) {
@@ -65,7 +45,7 @@ function createShip(name, length, isHorizontal) {
     shipSelector.append(ship);
 }
 
-function shipPlacer(shipsData, isHorizontal, buttonDiv, ships) {
+function shipPlacer(shipsData, isHorizontal, buttonDiv) {
     const rotateButton = document.createElement('button');
     const resetButton = document.createElement('button');
 
@@ -78,42 +58,79 @@ function shipPlacer(shipsData, isHorizontal, buttonDiv, ships) {
     buttonDiv.append(rotateButton, resetButton)
 
     rotateButton.addEventListener('click', () => {
-        if (isHorizontal) {
-            isHorizontal = false;
-            shipSelector.replaceChildren()
-            renderShips(shipsData, isHorizontal)
-        } else {
-            isHorizontal = true;
-            shipSelector.replaceChildren()
-            renderShips(shipsData, isHorizontal)
-        }
+        isHorizontal = !isHorizontal
+        shipSelector.replaceChildren()
+        renderShips(shipsData, isHorizontal)
     })
     renderShips(shipsData, isHorizontal)
-}
-
-const ships = document.querySelectorAll('.ship');
-
-ships.forEach(ship => {
-    ship.addEventListener('dragstart', () => {
-        ship.classList.add('dragging');
-    })
-
-    ship.addEventListener('dragend', (e) => {
-        ship.classList.remove('dragging');
-        console.log(e.target)
-    })
-})
-
-playerGrid.addEventListener('dragover', () => {
-    console.log('drag over')
-})
-
-function drop(e) {
-    e.preventDefault()
 }
 
 function renderShips(shipsData, isHorizontal) {
     shipsData.forEach(ship => {
         createShip(ship.name, ship.length, isHorizontal)
     });
+
+    const ships = document.querySelectorAll('.ship');
+
+    ships.forEach(ship => {
+        ship.addEventListener('dragstart', () => {
+            ship.classList.add('dragging');
+        })
+
+        ship.addEventListener('dragend', () => {
+            ship.classList.remove('dragging');
+        })
+    })
 }
+
+playerGrid.addEventListener('dragover', (e) => {
+    e.preventDefault();
+})
+
+playerGrid.addEventListener('drop', drop)
+
+function drop(e) {
+    e.preventDefault()
+    const targetCell = e.target;
+    const ship = document.querySelector('.dragging');
+    const shipName = ship.getAttribute('data-name');
+    const shipLength = parseInt(ship.getAttribute('data-length'));
+    const shipIsHorizontal = ship.getAttribute('data-horizontal') === 'true';
+
+    if (targetCell.classList.contains('cell')) {
+        const cellX = parseInt(targetCell.getAttribute('data-row'));
+        const cellY = parseInt(targetCell.getAttribute('data-column'));
+
+        if (validatePlacement(cellX, cellY, shipLength, shipIsHorizontal)) {
+            console.log(`Dropped ${shipName} at [${cellX}, ${cellY}]`)
+        } else {
+            console.log(`Invalid Placement at [${cellX}, ${cellY}]`)
+        }
+    }
+}
+
+function validatePlacement(startX, startY, length, isHorizontal) {
+    if (isHorizontal) {
+        if (startY + length > 10) {
+            return false;
+        }
+        for (let i = 0; i < length; i++) {
+            const cell = document.querySelector(`.cell[data-row='${startX}'][data-column='${startY + i}']`)
+            if (!cell || cell.classList.contains('placed')) {
+                return false;
+            }
+        }
+    } else {
+        if (startX + length > 10) {
+            return false;
+        }
+        for (let i = 0; i < length; i++) {
+            const cell = document.querySelector(`.cell[data-row='${startX + i}'][data-column='${startY}']`)
+            if (!cell || cell.classList.contains('placed')) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
