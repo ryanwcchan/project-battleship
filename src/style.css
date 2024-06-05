@@ -230,3 +230,7 @@ body {
 .dragging {
     opacity: .5;
 }
+
+.placed {
+    background-color: black;
+}
