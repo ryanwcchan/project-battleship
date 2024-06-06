@@ -1,8 +1,13 @@
 import './style.css'
 import createGrid from './createGrid';
+import createShip from './createShip';
 
+// Initialization
 const playerGrid = document.getElementById('player-grid');
 const computerGrid = document.getElementById('computer-grid');
+
+const shipSelector = document.getElementById('ship-selection');
+const buttonDiv = document.querySelector('.button-container');
 
 let isHorizontal = true;
 
@@ -19,61 +24,34 @@ let placedShips = []
 createGrid(playerGrid);
 createGrid(computerGrid);
 
-const shipSelector = document.getElementById('ship-selection');
-const buttonDiv = document.querySelector('.button-container');
+// Create rotate and reset button next to ship selection
+const rotateButton = document.createElement('button');
+const resetButton = document.createElement('button');
 
-shipPlacer(shipsData, isHorizontal, buttonDiv);
+rotateButton.classList.add('rotate-button');
+resetButton.classList.add('reset-button');
 
-function createShip(name, length, isHorizontal) {
-    const ship = document.createElement('div');
-    ship.classList.add('ship');
-    ship.setAttribute('data-length', length);
-    ship.setAttribute('data-name', name);
-    ship.setAttribute('draggable', true)
-    ship.setAttribute('data-horizontal', isHorizontal);
+rotateButton.textContent = "Rotate";
+resetButton.textContent = "Reset";
 
-    if (isHorizontal) {
-        ship.classList.add('horizontal');
-    } else {
-        ship.classList.add('vertical');
-    }
+buttonDiv.append(rotateButton, resetButton)
 
-    for (let i = 0; i < length; i++) {
-        const cell = document.createElement('div');
-        cell.classList.add('cell');
-        cell.classList.add('ship-cell');
-        ship.appendChild(cell);
-    }
-    shipSelector.append(ship);
-}
-
-function shipPlacer(shipsData, isHorizontal, buttonDiv) {
-    const rotateButton = document.createElement('button');
-    const resetButton = document.createElement('button');
-
-    rotateButton.classList.add('rotate-button');
-    resetButton.classList.add('reset-button');
-
-    rotateButton.textContent = "Rotate";
-    resetButton.textContent = "Reset";
-
-    buttonDiv.append(rotateButton, resetButton)
-
-    rotateButton.addEventListener('click', () => {
-        isHorizontal = !isHorizontal
-        renderShips(shipsData, isHorizontal)
-    })
-
-    resetButton.addEventListener('click', resetGame);
-
+rotateButton.addEventListener('click', () => {
+    isHorizontal = !isHorizontal
     renderShips(shipsData, isHorizontal)
-}
+})
+
+resetButton.addEventListener('click', () => {
+    resetGame();
+});
+
+renderShips(shipsData, isHorizontal)
 
 function renderShips(shipsData, isHorizontal) {
     shipSelector.replaceChildren();
     shipsData.forEach(ship => {
         if (!placedShips.includes(ship.name)) {
-            createShip(ship.name, ship.length, isHorizontal)
+            createShip(ship.name, ship.length, isHorizontal, shipSelector)
         }
     });
 
@@ -186,6 +164,8 @@ function resetGame() {
     playerGrid.replaceChildren();
     computerGrid.replaceChildren();
 
+    isHorizontal = true;
+
     createGrid(playerGrid);
     createGrid(computerGrid);
 
@@ -199,5 +179,5 @@ function resetGame() {
 
     placedShips = [];
 
-    renderShips(shipsData, isHorizontal);
+    renderShips(shipsData, isHorizontal)
 }
