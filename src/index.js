@@ -63,6 +63,9 @@ function shipPlacer(shipsData, isHorizontal, buttonDiv) {
         isHorizontal = !isHorizontal
         renderShips(shipsData, isHorizontal)
     })
+
+    resetButton.addEventListener('click', resetGame);
+
     renderShips(shipsData, isHorizontal)
 }
 
@@ -177,4 +180,24 @@ function placeShipOnGrid(startX, startY, length, isHorizontal) {
             }
         }
     }
+}
+
+function resetGame() {
+    playerGrid.replaceChildren();
+    computerGrid.replaceChildren();
+
+    createGrid(playerGrid);
+    createGrid(computerGrid);
+
+    shipsData = [
+        { name: 'Carrier', length: 5 },
+        { name: 'Battleship', length: 4 },
+        { name: 'Cruiser', length: 3 },
+        { name: 'Submarine', length: 3 },
+        { name: 'Patrol Boat', length: 2 },
+    ];
+
+    placedShips = [];
+
+    renderShips(shipsData, isHorizontal);
 }
