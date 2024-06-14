@@ -16,10 +16,10 @@ let shipsData = [
     { name: 'Battleship', length: 4 },
     { name: 'Cruiser', length: 3 },
     { name: 'Submarine', length: 3 },
-    { name: 'Patrol Boat', length: 2 },
+    { name: 'Patrol-Boat', length: 2 },
 ]
 
-let placedShips = []
+let placedShips = [];
 
 createGrid(playerGrid);
 createGrid(computerGrid);
@@ -99,7 +99,7 @@ function drop(e) {
 
         if (validatePlacement(cellX, cellY, shipLength, shipIsHorizontal)) {
             console.log(`Dropped ${shipName} at [${cellX}, ${cellY}]`)
-            placeShipOnGrid(cellX, cellY, shipLength, shipIsHorizontal)
+            placeShipOnGrid(cellX, cellY, shipLength, shipIsHorizontal, shipName, playerGrid)
 
             shipSelector.removeChild(ship);
 
@@ -115,13 +115,13 @@ function drop(e) {
     }
 }
 
-function validatePlacement(startX, startY, length, isHorizontal) {
+function validatePlacement(startX, startY, length, isHorizontal, grid) {
     if (isHorizontal) {
         if (startY + length > 10) {
             return false;
         }
         for (let i = 0; i < length; i++) {
-            const cell = document.querySelector(`.cell[data-row='${startX}'][data-column='${startY + i}']`)
+            const cell = grid.querySelector(`.cell[data-row='${startX}'][data-column='${startY + i}']`)
             if (!cell || cell.classList.contains('placed')) {
                 return false;
             }
@@ -131,7 +131,7 @@ function validatePlacement(startX, startY, length, isHorizontal) {
             return false;
         }
         for (let i = 0; i < length; i++) {
-            const cell = document.querySelector(`.cell[data-row='${startX + i}'][data-column='${startY}']`)
+            const cell = grid.querySelector(`.cell[data-row='${startX + i}'][data-column='${startY}']`)
             if (!cell || cell.classList.contains('placed')) {
                 return false;
             }
@@ -140,21 +140,23 @@ function validatePlacement(startX, startY, length, isHorizontal) {
     return true;
 }
 
-function placeShipOnGrid(startX, startY, length, isHorizontal) {
+function placeShipOnGrid(startX, startY, length, isHorizontal, shipName, grid) {
     if (isHorizontal) {
         for (let i = 0; i < length; i++) {
-            const cell = document.querySelector(`.cell[data-row='${startX}'][data-column='${startY + i}']`);
+            const cell = grid.querySelector(`.cell[data-row='${startX}'][data-column='${startY + i}']`);
             if (cell) {
                 cell.classList.add('placed');
                 cell.classList.add('ship-part');
+                cell.classList.add(shipName);
             }
         }
     } else {
         for (let i = 0; i < length; i++) {
-            const cell = document.querySelector(`.cell[data-row='${startX + i}'][data-column='${startY}']`);
+            const cell = grid.querySelector(`.cell[data-row='${startX + i}'][data-column='${startY}']`);
             if (cell) {
                 cell.classList.add('placed');
                 cell.classList.add('ship-part');
+                cell.classList.add(shipName);
             }
         }
     }
@@ -174,10 +176,29 @@ function resetGame() {
         { name: 'Battleship', length: 4 },
         { name: 'Cruiser', length: 3 },
         { name: 'Submarine', length: 3 },
-        { name: 'Patrol Boat', length: 2 },
+        { name: 'Patrol-Boat', length: 2 },
     ];
 
     placedShips = [];
 
-    renderShips(shipsData, isHorizontal)
+    renderShips(shipsData, isHorizontal);
+    placeComputerShips();
+}
+
+function placeComputerShips() {
+    const computerShips = [...shipsData]
+
+    computerShips.forEach(ship => {
+        let placed = false;
+
+        while (!placed) {
+            const randomX = Math.floor(Math.random() * 10);
+            const randomY = Math.floor(Math.random() * 10);
+            const isHorizontal = Math.random() < 0.5;
+            if (validatePlacement(randomX, randomY, ship.length, isHorizontal, computerGrid)) {
+                placeShipOnGrid(randomX, randomY, ship.length, isHorizontal, ship.name, computerGrid);
+                placed = true;
+            }
+        }
+    })
 }
