@@ -2,13 +2,7 @@ import './style.css'
 import createGrid from './createGrid';
 import createShip from './createShip';
 
-// Initialization
-const playerGrid = document.getElementById('player-grid');
-const computerGrid = document.getElementById('computer-grid');
-
-const shipSelector = document.getElementById('ship-selection');
-const buttonDiv = document.querySelector('.button-container');
-
+// Global Game state variables
 let isHorizontal = true;
 
 let shipsData = [
@@ -21,33 +15,51 @@ let shipsData = [
 
 let placedShips = [];
 
-createGrid(playerGrid);
-createGrid(computerGrid);
+// Initialization
+const playerGrid = document.getElementById('player-grid');
+const computerGrid = document.getElementById('computer-grid');
+const shipSelector = document.getElementById('ship-selection');
+const buttonDiv = document.querySelector('.button-container');
 
-// Create rotate and reset button next to ship selection
-const rotateButton = document.createElement('button');
-const resetButton = document.createElement('button');
+// Initialize game
 
-rotateButton.classList.add('rotate-button');
-resetButton.classList.add('reset-button');
+function initializeGame() {
+    createGrid(playerGrid);
+    createGrid(computerGrid);
 
-rotateButton.textContent = "Rotate";
-resetButton.textContent = "Reset";
+    // Create rotate and reset button next to ship selection
+    const rotateButton = document.createElement('button');
+    const resetButton = document.createElement('button');
 
-buttonDiv.append(rotateButton, resetButton)
+    rotateButton.classList.add('rotate-button');
+    resetButton.classList.add('reset-button');
 
-rotateButton.addEventListener('click', () => {
-    isHorizontal = !isHorizontal
-    renderShips(shipsData, isHorizontal)
-})
+    rotateButton.textContent = "Rotate";
+    resetButton.textContent = "Reset";
 
-resetButton.addEventListener('click', () => {
-    resetGame();
-});
+    buttonDiv.append(rotateButton, resetButton)
 
-renderShips(shipsData, isHorizontal)
+    rotateButton.addEventListener('click', () => {
+        isHorizontal = !isHorizontal
+        renderShips()
+    })
 
-function renderShips(shipsData, isHorizontal) {
+    resetButton.addEventListener('click', () => {
+        resetGame();
+    });
+
+    renderShips()
+
+    playerGrid.addEventListener('dragover', (e) => {
+        e.preventDefault();
+    })
+    
+    playerGrid.addEventListener('drop', drop)
+
+    placeComputerShips();
+}
+
+function renderShips() {
     shipSelector.replaceChildren();
     shipsData.forEach(ship => {
         if (!placedShips.includes(ship.name)) {
@@ -67,12 +79,6 @@ function renderShips(shipsData, isHorizontal) {
         })
     })
 }
-
-playerGrid.addEventListener('dragover', (e) => {
-    e.preventDefault();
-})
-
-playerGrid.addEventListener('drop', drop)
 
 function drop(e) {
     e.preventDefault()
@@ -108,7 +114,7 @@ function drop(e) {
             // Remove ship from shipData
             shipsData = shipsData.filter(s => s.name !== shipName)
 
-            renderShips(shipsData, isHorizontal)
+            renderShips()
         } else {
             console.log(`Invalid Placement at [${cellX}, ${cellY}]`)
         }
@@ -162,6 +168,24 @@ function placeShipOnGrid(startX, startY, length, isHorizontal, shipName, grid) {
     }
 }
 
+function placeComputerShips() {
+    const computerShips = [...shipsData]
+
+    computerShips.forEach(ship => {
+        let placed = false;
+
+        while (!placed) {
+            const randomX = Math.floor(Math.random() * 10);
+            const randomY = Math.floor(Math.random() * 10);
+            const isHorizontal = Math.random() < 0.5;
+            if (validatePlacement(randomX, randomY, ship.length, isHorizontal, computerGrid)) {
+                placeShipOnGrid(randomX, randomY, ship.length, isHorizontal, ship.name, computerGrid);
+                placed = true;
+            }
+        }
+    })
+}
+
 function resetGame() {
     playerGrid.replaceChildren();
     computerGrid.replaceChildren();
@@ -181,24 +205,8 @@ function resetGame() {
 
     placedShips = [];
 
-    renderShips(shipsData, isHorizontal);
+    renderShips();
     placeComputerShips();
 }
 
-function placeComputerShips() {
-    const computerShips = [...shipsData]
-
-    computerShips.forEach(ship => {
-        let placed = false;
-
-        while (!placed) {
-            const randomX = Math.floor(Math.random() * 10);
-            const randomY = Math.floor(Math.random() * 10);
-            const isHorizontal = Math.random() < 0.5;
-            if (validatePlacement(randomX, randomY, ship.length, isHorizontal, computerGrid)) {
-                placeShipOnGrid(randomX, randomY, ship.length, isHorizontal, ship.name, computerGrid);
-                placed = true;
-            }
-        }
-    })
-}
+initializeGame();
