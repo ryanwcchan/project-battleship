@@ -20,6 +20,7 @@ const playerGrid = document.getElementById('player-grid');
 const computerGrid = document.getElementById('computer-grid');
 const shipSelector = document.getElementById('ship-selection');
 const buttonDiv = document.querySelector('.button-container');
+const newGameBtn = document.getElementById('newGame');
 
 // Initialize game
 
@@ -27,6 +28,24 @@ function initializeGame() {
     createGrid(playerGrid);
     createGrid(computerGrid);
 
+    createButtons()
+
+    renderShips()
+
+    playerGrid.addEventListener('dragover', (e) => {
+        e.preventDefault();
+    })
+    
+    playerGrid.addEventListener('drop', drop)
+
+    placeComputerShips();
+
+    newGameBtn.addEventListener('click', ()=> {
+        resetGame()
+    })
+}
+
+function createButtons() {
     // Create rotate and reset button next to ship selection
     const rotateButton = document.createElement('button');
     const resetButton = document.createElement('button');
@@ -47,16 +66,6 @@ function initializeGame() {
     resetButton.addEventListener('click', () => {
         resetGame();
     });
-
-    renderShips()
-
-    playerGrid.addEventListener('dragover', (e) => {
-        e.preventDefault();
-    })
-    
-    playerGrid.addEventListener('drop', drop)
-
-    placeComputerShips();
 }
 
 function renderShips() {
@@ -103,7 +112,7 @@ function drop(e) {
         const cellX = parseInt(targetCell.getAttribute('data-row'));
         const cellY = parseInt(targetCell.getAttribute('data-column'));
 
-        if (validatePlacement(cellX, cellY, shipLength, shipIsHorizontal)) {
+        if (validatePlacement(cellX, cellY, shipLength, shipIsHorizontal, playerGrid)) {
             console.log(`Dropped ${shipName} at [${cellX}, ${cellY}]`)
             placeShipOnGrid(cellX, cellY, shipLength, shipIsHorizontal, shipName, playerGrid)
 
@@ -115,6 +124,12 @@ function drop(e) {
             shipsData = shipsData.filter(s => s.name !== shipName)
 
             renderShips()
+
+            if (placedShips.length === 5) {
+                createStartButton();
+            }
+
+
         } else {
             console.log(`Invalid Placement at [${cellX}, ${cellY}]`)
         }
@@ -186,6 +201,19 @@ function placeComputerShips() {
     })
 }
 
+function createStartButton() {
+    buttonDiv.replaceChildren();
+
+    const startButton = document.createElement('button');
+    startButton.classList.add('start-button');
+    startButton.textContent = 'Start Game';
+    buttonDiv.append(startButton)
+
+    startButton.addEventListener('click', () => {
+        startGame();
+    });
+}
+
 function resetGame() {
     playerGrid.replaceChildren();
     computerGrid.replaceChildren();
@@ -207,6 +235,14 @@ function resetGame() {
 
     renderShips();
     placeComputerShips();
+
+    buttonDiv.replaceChildren()
+    createButtons();
+}
+
+function startGame() {
+    console.log('Start Game')
 }
 
 initializeGame();
+
