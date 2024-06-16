@@ -1,9 +1,13 @@
 import './style.css'
 import createGrid from './createGrid';
 import createShip from './createShip';
+import Player from './player'
 
 // Global Game state variables
+let player;
+let computer;
 let isHorizontal = true;
+let gameStart = false;
 
 let shipsData = [
     { name: 'Carrier', length: 5 },
@@ -27,10 +31,11 @@ const newGameBtn = document.getElementById('newGame');
 function initializeGame() {
     createGrid(playerGrid);
     createGrid(computerGrid);
-
     createButtons()
-
     renderShips()
+
+    player = new Player('Player', 'real')
+    computer = new Player('Computer', 'computer')
 
     playerGrid.addEventListener('dragover', (e) => {
         e.preventDefault();
@@ -43,20 +48,25 @@ function initializeGame() {
     newGameBtn.addEventListener('click', ()=> {
         resetGame()
     })
+
+    computerGrid.addEventListener('click', attackCell);
 }
 
 function createButtons() {
     // Create rotate and reset button next to ship selection
     const rotateButton = document.createElement('button');
     const resetButton = document.createElement('button');
+    const randomize = document.createElement('button')
 
-    rotateButton.classList.add('rotate-button');
-    resetButton.classList.add('reset-button');
+    rotateButton.classList.add('button');
+    resetButton.classList.add('button');
+    randomize.classList.add('button')
 
     rotateButton.textContent = "Rotate";
     resetButton.textContent = "Reset";
+    randomize.textContent = "Randomize Placement"
 
-    buttonDiv.append(rotateButton, resetButton)
+    buttonDiv.append(rotateButton, resetButton, randomize)
 
     rotateButton.addEventListener('click', () => {
         isHorizontal = !isHorizontal
@@ -66,6 +76,10 @@ function createButtons() {
     resetButton.addEventListener('click', () => {
         resetGame();
     });
+
+    randomize.addEventListener('click', () => {
+        randomizePlacements();
+    })
 }
 
 function renderShips() {
@@ -114,10 +128,10 @@ function drop(e) {
 
         if (validatePlacement(cellX, cellY, shipLength, shipIsHorizontal, playerGrid)) {
             console.log(`Dropped ${shipName} at [${cellX}, ${cellY}]`)
+            player.gameboard.placeShip(cellX, cellY, shipLength, shipIsHorizontal);
             placeShipOnGrid(cellX, cellY, shipLength, shipIsHorizontal, shipName, playerGrid)
 
             shipSelector.removeChild(ship);
-
             placedShips.push(shipName);
 
             // Remove ship from shipData
@@ -195,7 +209,45 @@ function placeComputerShips() {
             const isHorizontal = Math.random() < 0.5;
             if (validatePlacement(randomX, randomY, ship.length, isHorizontal, computerGrid)) {
                 placeShipOnGrid(randomX, randomY, ship.length, isHorizontal, ship.name, computerGrid);
+                computer.gameboard.placeShip(randomX, randomY, ship.length, isHorizontal);
                 placed = true;
+                console.log(randomX, randomY, ship.length)
+            }
+        }
+    })
+}
+
+function randomizePlacements() {
+    const playerShips = [...shipsData]
+
+    playerShips.forEach(ship => {
+        let placed = false;
+
+        while (!placed) {
+            const randomX = Math.floor(Math.random() * 10);
+            const randomY = Math.floor(Math.random() * 10);
+            const isHorizontal = Math.random() < 0.5;
+            if (validatePlacement(randomX, randomY, ship.length, isHorizontal, computerGrid)) {
+                placeShipOnGrid(randomX, randomY, ship.length, isHorizontal, ship.name, playerGrid);
+                player.gameboard.placeShip(randomX, randomY, ship.length, isHorizontal);
+                placed = true;
+                console.log(randomX, randomY, ship.length)
+
+                // Remove ship from shipData
+                shipsData = shipsData.filter(s => s.name !== ship.name)
+
+                const shipElement = shipSelector.querySelector(`[data-name='${ship.name}']`);
+                if (shipElement) {
+                    shipSelector.removeChild(shipElement);
+                }
+
+                placedShips.push(ship.name);
+
+                renderShips()
+
+                if (placedShips.length === 5) {
+                    createStartButton();
+                }
             }
         }
     })
@@ -205,9 +257,10 @@ function createStartButton() {
     buttonDiv.replaceChildren();
 
     const startButton = document.createElement('button');
-    startButton.classList.add('start-button');
+    startButton.setAttribute('id', 'start-button');
+    startButton.classList.add('button');
     startButton.textContent = 'Start Game';
-    buttonDiv.append(startButton)
+    shipSelector.append(startButton)
 
     startButton.addEventListener('click', () => {
         startGame();
@@ -219,6 +272,7 @@ function resetGame() {
     computerGrid.replaceChildren();
 
     isHorizontal = true;
+    gameStart = false
 
     createGrid(playerGrid);
     createGrid(computerGrid);
@@ -230,6 +284,9 @@ function resetGame() {
         { name: 'Submarine', length: 3 },
         { name: 'Patrol-Boat', length: 2 },
     ];
+    
+    player = new Player('Player', 'real')
+    computer = new Player('Computer', 'computer')
 
     placedShips = [];
 
@@ -240,8 +297,84 @@ function resetGame() {
     createButtons();
 }
 
+function attackCell(e) {
+    if (gameStart) {
+        let targetCell = e.target;
+
+        if (!targetCell.classList.contains('cell') || targetCell.classList.contains('attacked')) {
+            console.log('Cell already attacked')
+            return;
+        }
+    
+        const cellX = parseInt(targetCell.getAttribute('data-row'));
+        const cellY = parseInt(targetCell.getAttribute('data-column'));
+    
+        console.log(cellX, cellY)
+    
+        let attackSuccess = computer.gameboard.receiveAttack(cellX, cellY);
+    
+        console.log(attackSuccess)
+    
+        if (attackSuccess) {
+            targetCell.classList.add('hit');
+        } else {
+            targetCell.classList.add('miss');
+        }
+
+        targetCell.classList.add('attacked');
+    
+        if (computer.gameboard.allShipsSunk()) {
+            winMessage('You win!');
+            gameStart = false;
+        } else {
+            computerAttack();
+        }
+    }
+}
+
+function computerAttack() {
+    let cellX = Math.floor(Math.random() * 10);
+    let cellY = Math.floor(Math.random() * 10);
+    let targetCell = playerGrid.querySelector(`.cell[data-row='${cellX}'][data-column='${cellY}']`);
+
+    // Check if the cell has already been attacked
+    if (targetCell.classList.contains('attacked')) {
+        computerAttack();
+
+        return;
+    }
+
+    console.log(`Computer attacks [${cellX}, ${cellY}]`);
+
+    const attackSuccess = player.gameboard.receiveAttack(cellX, cellY);
+
+    if (attackSuccess) {
+        targetCell.classList.add('hit');
+    } else {
+        targetCell.classList.add('miss');
+    }
+
+    targetCell.classList.add('attacked');
+
+    if (player.gameboard.allShipsSunk()) {
+        winMessage('Computer wins!');
+        gameStart = false; // Optionally stop the game if all ships are sunk
+    }
+}
+
+function winMessage(msg) {
+    const message = document.createElement('h1');
+    message.classList.add('win-message');
+    message.textContent = msg;
+    shipSelector.append(message)
+}
+
 function startGame() {
     console.log('Start Game')
+    
+    gameStart = true
+
+    shipSelector.replaceChildren();
 }
 
 initializeGame();

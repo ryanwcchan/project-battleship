@@ -18,36 +18,22 @@ class Gameboard {
         }
     }
 
-    placeShip(startX, startY, length, orientation) {
+    placeShip(startX, startY, length, isHorizontal) {
         // Create new ship object
         const ship = new Ship(length);
 
         // Placing ship on coordinates
-        if (orientation === "horizontal") {
+        if (isHorizontal) {
             for (let i = 0; i < length; i++) {
-                if (startX + i >= this.cols) {
-                    throw new Error("Ship placement out of bounds")
-                }
-
-                if (this.grid[startX + i][startY] !== null) {
-                    throw new Error("Cannot place ship here");
-                }
-
-                this.grid[startX + i][startY] = ship;
-                ship.coords.push([(startX + i), startY])
-            }
-        } else if (orientation === "vertical") {
-            for (let i = 0; i < length; i++) {
-                if (startY + i >= this.rows) {
-                    throw new Error("Ship placement out of bounds")
-                }
-
-                if (this.grid[startX][startY + i] !== null) {
-                    throw new Error("Cannot place ship here");
-                }
-
+                // console.log(`gameboard.placeShip = ${[startX]} ${[startY + i]}`)
                 this.grid[startX][startY + i] = ship;
                 ship.coords.push([startX, (startY + i)])
+            }
+        } else {
+            for (let i = 0; i < length; i++) {
+                // console.log(`gameboard.placeShip = ${[startX + i]} ${[startY]}`)
+                this.grid[startX + i][startY] = ship;
+                ship.coords.push([(startX + i), startY])
             }
         }
 

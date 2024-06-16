@@ -5,7 +5,7 @@ class Player {
         this.name = name;
         this.type = type;
         this.score = 0;
-        this.gameboard = new Gameboard();
+        this.gameboard = new Gameboard(10, 10);
     }
 
     addShip(x, y) {

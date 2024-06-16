@@ -148,8 +148,13 @@ body {
 }
 
 #title {
-    font-size: 2em;
-    margin: 30px
+    font-size: 5em;
+    margin: 30px;
+    text-align: center;
+    font-weight: bold;
+    color: #2196F3; /* Blue color */
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .title-container {
@@ -167,14 +172,22 @@ body {
     height: 30px;
 }
 
-.footer {
-    padding: 1.5rem;
-    margin-top: auto;
-    text-align: center;
+#footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5rem;
+    width: 100%;
+}
+
+.fa-github{
+    margin: 10px;
+    font-size: 30px;
 }
 
 #ship-selection {
     display: flex;
+    justify-content: center;
     align-self: center;
     margin: 1rem;
     padding: 1rem;
@@ -197,10 +210,6 @@ body {
 #player-grid,
 #computer-grid {
     background-color: wheat;
-}
-
-#board-container .cell:hover {
-    background-color: red;
 }
 
 .ship-cell {
@@ -234,4 +243,37 @@ body {
 
 .placed {
     background-color: black;
+}
+
+.cell.hit {
+    background-color: red;
+}
+
+.cell.miss {
+    background-color: gray;
+}
+
+.win-message {
+    font-size: 5rem;
+    font-weight: bold;
+    text-align: center;
+    color: #4CAF50;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50; /* Green background */
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s;
 }
